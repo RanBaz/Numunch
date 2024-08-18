@@ -41,9 +41,14 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-
-  resetPasswordToken: String,
-  resetPasswordExpire: Date,
+  isConfirmed: {
+    type: Boolean,
+    default: false,
+  },
+   confirmationToken: String,
+   confirmationTokenExpire: Date,
+   resetPasswordToken: String,
+   resetPasswordExpire: Date,
 });
 
 userSchema.pre("save", async function (next) {
@@ -62,7 +67,6 @@ userSchema.methods.getJWTToken = function () {
 };
 
 // Compare Password
-
 userSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
@@ -81,6 +85,22 @@ userSchema.methods.getResetPasswordToken = function () {
   this.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
 
   return resetToken;
+};
+
+// Generating Email Confirmation Token
+userSchema.methods.getConfirmationToken = function () {
+  // Generating Token
+  const confirmationToken = crypto.randomBytes(20).toString("hex");
+
+  // Hashing and adding confirmationToken to userSchema
+  this.confirmationToken = crypto
+    .createHash("sha256")
+    .update(confirmationToken)
+    .digest("hex");
+
+  this.confirmationTokenExpire = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
+
+  return confirmationToken;
 };
 
 module.exports = mongoose.model("User", userSchema);

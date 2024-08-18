@@ -93,14 +93,13 @@
 
 import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
-import { userSelector, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import CartIcon from "../../../images/cart.png";
 
 const Header = () => {
   const [keyword, setKeyword] = useState("");
   const history = useHistory();
   const { isAuthenticated } = useSelector((state) => state.user);
-
-
 
   const searchSubmitHandler = (e) => {
     e.preventDefault();
@@ -118,9 +117,12 @@ const Header = () => {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
+        {/* Brand */}
         <Link className="navbar-brand" to="/">
           <span>NU</span>munch
         </Link>
+
+        {/* Toggler for mobile view */}
         <button
           className="navbar-toggler"
           type="button"
@@ -132,11 +134,19 @@ const Header = () => {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
+
+        {/* Navbar content */}
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+          {/* Left-aligned navbar items */}
+          <ul className="navbar-nav mb-2 mb-lg-0">
             <li className="nav-item">
               <Link className="nav-link" to="/products">
                 Products
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/about">
+                About Us
               </Link>
             </li>
             <li className="nav-item">
@@ -145,52 +155,49 @@ const Header = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/about">
-                About Us
+              <Link className="nav-link" to="/policy">
+                Privacy Policy
               </Link>
             </li>
-            {isAuthenticated ? (
-              <>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/cart">
-                    Cart
-                  </Link>
-                </li>
-              </>
-            ) : (
+          </ul>
+
+          {/* Search form */}
+          <form className="d-flex mx-auto w-50" onSubmit={searchSubmitHandler}>
+            <input
+              className="form-control me-2"
+              type="search"
+              placeholder="Search Products"
+              aria-label="Search"
+              value={keyword}
+              onChange={handleKeywordChange}
+              style={{ flexGrow: 1 }}
+            />
+            <button className="btn btn-outline-success" type="submit">
+              Search
+            </button>
+          </form>
+
+          {/* Right-aligned navbar items */}
+          <ul className="navbar-nav ms-auto mb-2 mb-lg-0 d-flex align-items-center">
+            <li className="nav-item">
+              <Link className="nav-link d-flex align-items-center" to="/cart">
+                {/* Adjust the size of the image here */}
+                <img
+                  src={CartIcon}
+                  alt="Cart Icon"
+                  style={{ width: "32px", height: "32px", marginRight: "8px" }} // Increased size
+                />
+                Cart
+              </Link>
+            </li>
+            {!isAuthenticated && (
               <li className="nav-item">
                 <Link className="nav-link" to="/login">
                   Login
                 </Link>
               </li>
             )}
-
-            <li className="nav-item">
-              <Link className="nav-link" to="/policy">
-                Privacy Policy
-              </Link>
-            </li>
-
-            <li className="nav-item">
-              <Link className="nav-link" to="/tnc">
-                Terms and Conditions
-              </Link>
-            </li>
-            
           </ul>
-          <form className="d-flex" onSubmit={searchSubmitHandler}>
-            <input
-              className="form-control me-2"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-              value={keyword}
-              onChange={handleKeywordChange}
-            />
-            <button className="btn btn-outline-success" type="submit" onClick={searchSubmitHandler}>
-              Search
-            </button>
-          </form>
         </div>
       </div>
     </nav>

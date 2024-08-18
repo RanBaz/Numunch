@@ -44,6 +44,10 @@ import About from "./component/layout/About/About";
 import NotFound from "./component/layout/Not Found/NotFound";
 import policy from "./component/layout/Header/Privacypolicy.js";
 import tnc from "./component/layout/Header/TnC.js";
+import EmailConfirmation from "./component/User/EmailConfirmation"; // New import
+
+
+
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
@@ -184,6 +188,9 @@ function App() {
           isAdmin={true}
           component={ProductReviews}
         />
+
+        {/* New route for email confirmation */}
+        <Route exact path="/confirm/:token" component={EmailConfirmation} />
 
         <Route
           component={
