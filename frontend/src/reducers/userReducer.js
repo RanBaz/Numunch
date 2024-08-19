@@ -51,13 +51,22 @@ export const userReducer = (state = { user: {} }, action) => {
         isAuthenticated: false,
       };
     case LOGIN_SUCCESS:
-    case REGISTER_USER_SUCCESS:
     case LOAD_USER_SUCCESS:
       return {
         ...state,
         loading: false,
         isAuthenticated: true,
         user: action.payload,
+      };
+
+    // Handling registration success for redirection
+    case REGISTER_USER_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isAuthenticated: false,  // User is not authenticated until email confirmation
+        user: action.payload,
+        registrationSuccess: true,  // **Added this flag**
       };
 
     case LOGOUT_SUCCESS:
@@ -95,6 +104,7 @@ export const userReducer = (state = { user: {} }, action) => {
       return {
         ...state,
         error: null,
+        registrationSuccess: false,  // **Resetting the flag on clearing errors**
       };
 
     default:
@@ -269,3 +279,4 @@ export const userDetailsReducer = (state = { user: {} }, action) => {
       return state;
   }
 };
+

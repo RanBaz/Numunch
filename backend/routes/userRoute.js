@@ -12,6 +12,7 @@ const {
   getSingleUser,
   updateUserRole,
   deleteUser,
+  confirmEmail, // Add this line
 } = require("../controllers/userController");
 const { isAuthenticatedUser, authorizeRoles } = require("../middleware/auth");
 
@@ -43,5 +44,9 @@ router
   .put(isAuthenticatedUser, authorizeRoles("admin"), updateUserRole)
   .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteUser);
 
-module.exports = router;
 
+  // New route for email confirmation
+router.route("/confirm/:token").get(confirmEmail);
+
+
+module.exports = router;

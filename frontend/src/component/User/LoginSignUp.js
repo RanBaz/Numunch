@@ -40,7 +40,7 @@ const LoginSignUp = ({ history, location }) => {
     dispatch(login(loginEmail, loginPassword));
   };
 
-  const registerSubmit = (e) => {
+  const registerSubmit = async (e) => {
     e.preventDefault();
 
     const myForm = new FormData();
@@ -49,7 +49,12 @@ const LoginSignUp = ({ history, location }) => {
     myForm.set("email", email);
     myForm.set("password", password);
     myForm.set("avatar", avatar);
-    dispatch(register(myForm));
+
+    const success = await dispatch(register(myForm));
+  
+    if (success) {
+      history.push("/login");
+    }
   };
 
   const registerDataChange = (e) => {

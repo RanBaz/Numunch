@@ -7,48 +7,78 @@ const crypto = require("crypto");
 const cloudinary = require("cloudinary");
 
 // Register a User
-// exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-//   const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
-//     folder: "avatars",
-//     width: 150,
-//     crop: "scale",
-//   });
-
-//   const { name, email, password } = req.body;
-
-//   const user = await User.create({
-//     name,
-//     email,
-//     password,
-//     avatar: {
-//       public_id: myCloud.public_id,
-//       url: myCloud.secure_url,
-//     },
-//   });
-
-//   sendToken(user, 201, res);
-// });
-
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  const { name, email, password } = req.body
-  const user = await User.create({
-      name,
-      email,
-      password,
-      avatar: {
-          public_id: 'This is a sample id',
-          url: 'profile_pic_url'
-      }
-  })
+  const { name, email, password } = req.body;
 
-  sendToken(user, 201, res)
-})
+  const user = await User.create({
+    name,
+    email,
+    password,
+    avatar: {
+      public_id: 'This is a sample id',
+      url: 'profile_pic_url'
+    },
+  });
+
+  // Send confirmation email
+  const confirmationToken = user.getConfirmationToken();
+
+  await user.save({ validateBeforeSave: false });
+
+  const confirmUrl = `${req.protocol}://${req.get(
+    "host"
+  )}/api/v1/confirm/${confirmationToken}`;
+
+  const message = `Please confirm your email by clicking on the following link: \n\n ${confirmUrl} \n\nIf you have not requested this email then, please ignore it.`;
+
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: `Email Confirmation`,
+      message,
+    });
+
+    res.status(201).json({
+      success: true,
+      message: `Email sent to ${user.email} successfully. Please confirm your email to complete registration.`,
+    });
+  } catch (error) {
+    user.confirmationToken = undefined;
+    user.confirmationTokenExpire = undefined;
+    
+    await user.save({ validateBeforeSave: false });
+
+    return next(new ErrorHander(error.message, 500));
+  }
+});
+
+// Confirm Email
+exports.confirmEmail = catchAsyncErrors(async (req, res, next) => {
+  const confirmationToken = crypto
+    .createHash("sha256")
+    .update(req.params.token)
+    .digest("hex");
+
+  const user = await User.findOne({
+    confirmationToken,
+    confirmationTokenExpire: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return next(new ErrorHander("Invalid or expired confirmation token", 400));
+  }
+
+  user.isConfirmed = true;
+  user.confirmationToken = undefined;
+  user.confirmationTokenExpire = undefined;
+  await user.save();
+
+  sendToken(user, 200, res);
+});
 
 // Login User
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {
   const { email, password } = req.body;
-
-  // checking if user has given password and email both
 
   if (!email || !password) {
     return next(new ErrorHander("Please Enter Email & Password", 400));
@@ -64,6 +94,11 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 
   if (!isPasswordMatched) {
     return next(new ErrorHander("Invalid email or password", 401));
+  }
+
+  // Check if user's email is confirmed
+  if (!user.isConfirmed) {
+    return next(new ErrorHander("Please confirm your email before logging in", 401));
   }
 
   sendToken(user, 200, res);
@@ -145,7 +180,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
   }
 
   if (req.body.password !== req.body.confirmPassword) {
-    return next(new ErrorHander("Password does not password", 400));
+    return next(new ErrorHander("Password does not match", 400));
   }
 
   user.password = req.body.password;
@@ -178,7 +213,7 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
   }
 
   if (req.body.newPassword !== req.body.confirmPassword) {
-    return next(new ErrorHander("password does not match", 400));
+    return next(new ErrorHander("Password does not match", 400));
   }
 
   user.password = req.body.newPassword;

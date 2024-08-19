@@ -44,17 +44,21 @@ import About from "./component/layout/About/About";
 import NotFound from "./component/layout/Not Found/NotFound";
 import policy from "./component/layout/Header/Privacypolicy.js";
 import tnc from "./component/layout/Header/TnC.js";
+import EmailConfirmation from "./component/User/EmailConfirmation"; // New import
+
+
+
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
 
-  const [stripeApiKey, setStripeApiKey] = useState("");
+  // const [stripeApiKey, setStripeApiKey] = useState("");
 
-  async function getStripeApiKey() {
-    const { data } = await axios.get("/api/v1/stripeapikey");
+  // async function getStripeApiKey() {
+  //   const { data } = await axios.get("/api/v1/stripeapikey");
 
-    setStripeApiKey(data.stripeApiKey);
-  }
+  //   setStripeApiKey(data.stripeApiKey);
+  // }
 
   useEffect(() => {
     WebFont.load({
@@ -65,7 +69,7 @@ function App() {
 
     store.dispatch(loadUser());
 
-    getStripeApiKey();
+    // getStripeApiKey();
   }, []);
 
   window.addEventListener("contextmenu", (e) => e.preventDefault());
@@ -76,11 +80,11 @@ function App() {
 
       {isAuthenticated && <UserOptions user={user} />}
 
-      {stripeApiKey && (
+      {/* {stripeApiKey && (
         <Elements stripe={loadStripe(stripeApiKey)}>
           <ProtectedRoute exact path="/process/payment" component={Payment} />
         </Elements>
-      )}
+      )} */}
 
       <Switch>
         <Route exact path="/" component={Home} />
@@ -184,6 +188,9 @@ function App() {
           isAdmin={true}
           component={ProductReviews}
         />
+
+        {/* New route for email confirmation */}
+        <Route exact path="/confirm/:token" component={EmailConfirmation} />
 
         <Route
           component={
