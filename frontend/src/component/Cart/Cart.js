@@ -109,13 +109,6 @@
 // export default Cart;
 
 
-
-
-
-
-
-
-
 import React, { Fragment, useState } from "react";
 import "./Cart.css";
 import CartItemCard from "./CartItemCard";
@@ -164,6 +157,11 @@ const Cart = ({ history }) => {
 
   const handleCloseModal = () => {
     setOpenModal(false);
+  };
+
+  const handleDisagree = () => {
+    setIsChecked(false); // Ensure the checkbox is unchecked
+    handleCloseModal();
   };
 
   const handleAgree = () => {
@@ -257,7 +255,7 @@ const Cart = ({ history }) => {
       {/* Modal for Terms and Conditions */}
       <Modal
         open={openModal}
-        onClose={handleOpenModal} // Disable the default closing action
+        onClose={handleCloseModal} // Close the modal when clicking outside or pressing the escape key
         disableEscapeKeyDown={true} // Prevent closing with Escape key
         disableBackdropClick={true} // Prevent closing by clicking outside
       >
@@ -280,7 +278,7 @@ const Cart = ({ history }) => {
             Terms and Conditions
           </Typography>
           <Typography variant="body2" component="div" style={{ marginTop: 15 }}>
-            <p>Welcome to NUmunch!</p>
+          <p>Welcome to NUmunch!</p>
             <p>
               These terms and conditions outline the rules and regulations for
               the use of TMP's Website, located at
@@ -467,7 +465,7 @@ const Cart = ({ history }) => {
             <p>As long as the website and the information and services on the website are provided free of charge, we will not be liable for any loss or damage of any nature.</p>
           </Typography>
           <div style={{ display: "flex", justifyContent: "space-between", marginTop: 20 }}>
-            <Button variant="contained" color="secondary" onClick={handleCloseModal}>
+            <Button variant="contained" color="secondary" onClick={handleDisagree}>
               Disagree
             </Button>
             <Button variant="contained" color="primary" onClick={handleAgree}>
