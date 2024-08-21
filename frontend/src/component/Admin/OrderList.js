@@ -52,10 +52,14 @@ const OrderList = ({ history }) => {
   }, [dispatch, alert, error, deleteError, history, isDeleted]);
 
   const columns = [
-    { field: "id", headerName: "Order ID", minWidth: 300, flex: 1, },
-
-    { field: "orderid", headerName: "Order Number", minWidth: 300, flex: 1, },
-
+    {
+      field: "userName",
+      headerName: "User Name",
+      minWidth: 200,
+      flex: 0.5,
+    },
+    { field: "id", headerName: "Order ID", minWidth: 300, flex: 1 },
+    { field: "orderid", headerName: "Order Number", minWidth: 300, flex: 1 },
     {
       field: "status",
       headerName: "Status",
@@ -74,7 +78,6 @@ const OrderList = ({ history }) => {
       minWidth: 150,
       flex: 0.4,
     },
-
     {
       field: "amount",
       headerName: "Amount",
@@ -82,7 +85,7 @@ const OrderList = ({ history }) => {
       minWidth: 270,
       flex: 0.5,
     },
-
+    
     {
       field: "actions",
       flex: 0.3,
@@ -116,15 +119,16 @@ const OrderList = ({ history }) => {
   let shippedOrders = [];
   let deliveredOrders = [];
 
-    orders &&
-    orders.forEach((item, index) => {
+  orders &&
+    orders.forEach((item) => {
       let order = {
         orderid: orderIdCounter++,
         id: item._id,
         itemsQty: item.orderItems.length,
         amount: item.totalPrice,
         status: item.orderStatus,
-        createdAt: new Date(item.createdAt) // Assuming item.createdAt is the timestamp of the order creation
+        userName: item.user ? item.user.name : "N/A",
+        createdAt: new Date(item.createdAt)
       };
 
       if (item.orderStatus === "Delivered") {
@@ -136,11 +140,11 @@ const OrderList = ({ history }) => {
       }
     });
 
-  // Sort orders based on the createdAt timestamp in descending order to prioritize newly placed orders
   newOrders.sort((a, b) => b.createdAt - a.createdAt);
   shippedOrders.sort((a, b) => b.createdAt - a.createdAt);
   deliveredOrders.sort((a, b) => b.createdAt - a.createdAt);
   rows.push(...newOrders, ...shippedOrders, ...deliveredOrders);
+
   return (
     <Fragment>
       <MetaData title={`ALL ORDERS - Admin`} />
@@ -150,14 +154,14 @@ const OrderList = ({ history }) => {
         <div className="productListContainer">
           <h1 id="productListHeading">ALL ORDERS</h1>
           <div style={{ height: 600, width: "100%", overflow: "auto" }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={30}
-            disableSelectionOnClick
-            className="productListTable"
-            autoHeight
-          />
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              pageSize={30}
+              disableSelectionOnClick
+              className="productListTable"
+              autoHeight
+            />
           </div>
         </div>
       </div>
