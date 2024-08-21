@@ -199,6 +199,8 @@ import { DELETE_ORDER_RESET } from "../../constants/orderConstants";
 const OrderList = ({ history }) => {
   const dispatch = useDispatch();
 
+  let orderIdCounter = 1;
+
   const alert = useAlert();
 
   const { error, orders } = useSelector((state) => state.allOrders);
@@ -238,6 +240,17 @@ const OrderList = ({ history }) => {
       headerAlign: 'left',
       align: 'left',
     },
+
+
+    { field: "orderid", headerName: "Order Number", minWidth: 100, flex: 0.3,
+
+      headerAlign: 'left',
+      align: 'left',
+
+     },
+
+
+
     {
       field: "status",
       headerName: "Status",
@@ -307,6 +320,10 @@ const OrderList = ({ history }) => {
   orders &&
     orders.forEach((item) => {
       let order = {
+
+       
+      
+        orderid: orderIdCounter++,
         id: item._id,
         itemsQty: item.orderItems.length,
         amount: item.totalPrice,
