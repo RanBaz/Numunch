@@ -76,6 +76,10 @@ const ProcessOrder = ({ history, match }) => {
                       <span>{order.user && order.user.name}</span>
                     </div>
                     <div>
+                      <p>Order Id:</p>
+                      <span>{order._id}</span>
+                    </div>
+                    <div>
                       <p>Phone:</p>
                       <span>
                         {order.shippingInfo && order.shippingInfo.phoneNo}
