@@ -41,6 +41,10 @@ const OrderDetails = ({ match }) => {
                   <span>{order.user && order.user.name}</span>
                 </div>
                 <div>
+                  <p>orderid:</p>
+                  <span>{order.user && order.user.name}</span>
+                </div>
+                <div>
                   <p>Phone:</p>
                   <span>
                     {order.shippingInfo && order.shippingInfo.phoneNo}

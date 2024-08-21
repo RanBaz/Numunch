@@ -8,11 +8,17 @@
 .sidebar > a:first-child {
   padding: 0;
 }
-.sidebar > a > img {
-  width: 100%;
-  transition: all 0.5s;
+.sidebar > a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
+.sidebar > a > img {
+  width: 70%;
+  justify-content: right;
+  transition: all 0.5s;
+}
 .sidebar > a > img:hover {
   filter: drop-shadow(0 0 10px tomato);
 }
