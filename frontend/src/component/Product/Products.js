@@ -148,7 +148,6 @@ const Products = ({ match }) => {
 //     </Fragment>
 //   );
 // };
-
 return (
   <Fragment>
     {loading ? (
@@ -165,6 +164,53 @@ return (
             ))}
         </div>
 
+        <div className="filterBox">
+          <Typography>Price</Typography>
+          <form >
+            <Slider
+              value={priceFilter}
+              onChange={priceHandler}
+              valueLabelDisplay="auto"
+              aria-labelledby="range-slider"
+              min={25}
+              max={150}
+            />
+            <div className="price-inputs">
+              <span>From</span>
+              <input
+                type="number"
+                value={priceFilter[0]}
+                onChange={(e) => setPriceFilter([e.target.value, priceFilter[1]])}
+              />
+              <span>To</span>
+              <input
+                type="number"
+                value={priceFilter[1]}
+                onChange={(e) => setPriceFilter([priceFilter[0], e.target.value])}
+              />
+            </div>
+            <button
+              onClick={handleApplyPriceFilter}
+              type="submit"
+              className="applyButton"
+            >
+              Apply
+            </button>
+          </form>
+
+          <Typography>Categories</Typography>
+          <ul className="categoryBox">
+            {categories.map((category) => (
+              <li
+                className="category-link"
+                key={category}
+                onClick={() => handleCategoryClick(category)}
+              >
+                {category}
+              </li>
+            ))}
+          </ul>
+        </div>
         {resultPerPage < filteredProductsCount && (
           <div className="paginationBox">
             <Pagination

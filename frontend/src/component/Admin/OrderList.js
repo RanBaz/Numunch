@@ -189,6 +189,7 @@ import MetaData from "../layout/MetaData";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import SideBar from "./Sidebar";
+import "./OrderCard.css"
 import {
   deleteOrder,
   getAllOrders,
@@ -201,6 +202,7 @@ const OrderList = ({ history }) => {
   const dispatch = useDispatch();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isMobileView, setIsMobileView] = useState(false);
 
   // const toggleSidebar = () => {
   //   setIsSidebarOpen(!isSidebarOpen);
@@ -216,18 +218,13 @@ const OrderList = ({ history }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth <= 768) {
-        setIsSidebarOpen(false); // Sidebar closed by default on small screens
-      } else {
-        setIsSidebarOpen(true); // Sidebar open by default on larger screens
-      }
+      const width = window.innerWidth;
+      setIsMobileView(width <= 768);
+      setIsSidebarOpen(width > 768);
     };
 
     window.addEventListener("resize", handleResize);
-
-    // Initial check
-    handleResize();
-
+    handleResize(); // Initial check
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
@@ -376,30 +373,56 @@ const OrderList = ({ history }) => {
   deliveredOrders.sort((a, b) => b.createdAt - a.createdAt);
   rows.push(...newOrders, ...shippedOrders, ...deliveredOrders);
 
-  return (
-    <Fragment>
-    <MetaData title={`ALL ORDERS - Admin`} />
-
-    <div className={`dashboard ${isSidebarOpen ? "sidebar-open" : ""}`}>
-      <button className="sidebar-toggle" onClick={toggleSidebar}>
-        <img src={logo} alt="Toggle Sidebar" style={{ width: "50px", height: "40px" }} />
-      </button>
-      {isSidebarOpen && <SideBar />}
-      <div className="productListContainer">
-        <h1 id="productListHeading">ALL ORDERS</h1>
-        <div style={{ height: 600, width: "100%", overflow: "auto" }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={10}
-            disableSelectionOnClick
-            className="productListTable"
-            autoHeight
-          />
-        </div>
+  const OrderCard = ({ order }) => (
+    <div className="order-card">
+      <h3>Order #{order.orderid}</h3>
+      <p>User: {order.userName}</p>
+      <p>Status: <span className={order.status === "Delivered" ? "greenColor" : "redColor"}>{order.status}</span></p>
+      <p>Items: {order.itemsQty}</p>
+      <p>Amount: ₹{order.amount}</p>
+      <div className="order-actions">
+      <Link to={`/admin/order/${order.id}`} className="order-action-icon">
+          <EditIcon />
+        </Link>
+        <Button onClick={() => deleteOrderHandler(order.id)} className="order-action-icon">
+          <DeleteIcon />
+        </Button>
       </div>
     </div>
-  </Fragment>
+  );
+
+  return (
+    <Fragment>
+      <MetaData title={`ALL ORDERS - Admin`} />
+
+      <div className={`dashboard ${isSidebarOpen ? "sidebar-open" : ""}`}>
+        <button className="sidebar-toggle" onClick={toggleSidebar}>
+          <img src={logo} alt="Toggle Sidebar" style={{ width: "50px", height: "40px" }} />
+        </button>
+        {isSidebarOpen && <SideBar />}
+        <div className="productListContainer">
+          <h1 id="productListHeading">ALL ORDERS</h1>
+          {isMobileView ? (
+            <div className="order-cards-container">
+              {rows.map((order) => (
+                <OrderCard key={order.id} order={order} />
+              ))}
+            </div>
+          ) : (
+            <div style={{ height: 600, width: "100%", overflow: "auto" }}>
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                pageSize={10}
+                disableSelectionOnClick
+                className="productListTable"
+                autoHeight
+              />
+            </div>
+          )}
+        </div>
+      </div>
+    </Fragment>
   );
 };
 

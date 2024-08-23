@@ -1,262 +1,207 @@
-/* General Styling */
-body {
-  font-family: "Roboto", Arial, sans-serif;
-  color: rgba(0, 0, 0, 0.8);
-  margin: 0;
-  padding: 0;
-  background-color: #f9f9f9;
-}
-
-/* Container for the Whole Page */
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
-}
-
-/* Product Heading */
 .productsHeading {
   margin: 2vmax auto;
-  width: fit-content;
-  border-bottom: 2px solid #e0e0e0;
-  padding-bottom: 0.5vmax;
-  color: #333;
-  font-weight: 600;
-  font-size: 2vmax;
+  width: 15vw;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.171);
+  padding: 2vmax;
+  color: rgba(0, 0, 0, 0.678);
+  font: 500 1.5vmax "Roboto";
   text-align: center;
 }
 
-/* Product Grid */
 .products {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); /* Reduced min-width */
-  gap: 1.5vmax; /* Reduced gap */
-  padding: 2vmax 0;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 5vmax;
   justify-content: center;
+  min-height: 30vh;
 }
 
-/* Individual Product Card */
-.productCardContainer {
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  padding: 1vmax; /* Reduced padding */
-  max-width: 310px; /* Reduced max-width */
-}
-
-.productCardContainer:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-.productCardImage {
-  width: 100%; /* Changed to 100% */
-  height: 150px; /* Reduced height */
-  object-fit: cover;
-  margin: 0 auto;
-}
-
-.productCardInfo {
-  padding: 1vmax; /* Reduced padding */
-  text-align: center;
-}
-
-.productCardTitle {
-  font-size: 1.2vmax; /* Reduced font size */
-  font-weight: 500;
-  margin: 0.5vmax 0;
-  color: #333;
-}
-
-.productCardPrice {
-  font-size: 1vmax; /* Reduced font size */
-  color: #007bff;
-  font-weight: 700;
-  margin-bottom: 0.8vmax; /* Reduced margin */
-}
-
-.productCardDescription {
-  font-size: 0.9vmax; /* Reduced font size */
-  color: #777;
-  line-height: 1.4;
-  margin-bottom: 1vmax; /* Reduced margin */
-}
-
-/* Add to Cart Button */
-.addToCartBtn {
-  background-color: #ff6f61;
-  color: white;
-  border: none;
-  padding: 0.7vmax 1.2vmax; /* Reduced padding */
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-size: 0.9vmax; /* Reduced font size */
-  display: block;
-  margin: 0 auto;
-}
-
-.addToCartBtn:hover {
-  background-color: #ff4a3b;
-}
-
-/* Filter Box */
-.filterBox {
-  width: 15vmax;
-  padding: 1vmax;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2vmax;
-}
-
-.filterBox fieldset {
-  border: 1px solid #e0e0e0;
-  padding: 1vmax;
-  border-radius: 5px;
-}
-
-.filterBox button[type="submit"] {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 0.8vmax 1.5vmax;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  width: 100%;
-  margin-top: 1vmax;
-}
-
-.filterBox button[type="submit"]:hover {
-  background-color: #0056b3;
-}
-
-/* Price Input Styling */
+/* Add these styles */
 .price-inputs {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1vmax;
+  margin-top: 0.05px;
+  /* Adjust margin as needed */
 }
 
 .price-inputs input {
-  width: 50px;
-  padding: 0.5vmax;
-  font-size: 1vmax;
+  width: 40px;
+  /* Adjust width as needed */
+  padding: 5px;
+  font-size: 14px;
+  /* Adjust font size as needed */
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 3px;
   text-align: center;
 }
 
 .price-inputs span {
-  font-size: 1.2vmax;
-  color: #555;
+  margin: 15px 0;
+  /* Adjust margin as needed */
 }
 
-/* Category Links */
+.filterBox {
+  width: 10vmax;
+  position: absolute;
+  top: 10vmax;
+  left: 4vmax;
+}
+
+.filterBox button[type="submit"] {
+  background-color: tomato;
+  /* Change the background color */
+  color: white;
+  /* Change the text color */
+  border: none;
+  padding: 14px 30px;
+  /* Adjust padding as needed */
+  font-size: 16px;
+  /* Adjust font size as needed */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  /* Add transition effect */
+  height: 5px;
+  /* Adjust height as needed */
+  line-height: 0px;
+  /* Center text vertically */
+  margin-bottom: 8px;
+  border-radius: 50px;
+}
+
+.filterBox button[type="submit"]:hover {
+  background-color: #0d6efd;
+  /* Change the background color on hover */
+  transition: all 0.5s;
+}
+
 .categoryBox {
-  padding: 1vmax;
+  padding: 0%;
 }
 
 .category-link {
   list-style: none;
-  color: rgba(0, 0, 0, 0.7);
-  font-size: 1vmax;
-  margin: 0.5vmax 0;
+  color: rgba(0, 0, 0, 0.61);
+  font: 400 0.8vmax "Roboto";
+  margin: 0.4vmax;
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: all 0.5s;
 }
 
 .category-link:hover {
-  color: #007bff;
+  color: tomato;
 }
 
-/* Pagination */
+.filterBox>fieldset {
+  border: 1px solid rgba(0, 0, 0, 0.329);
+}
+
 .paginationBox {
   display: flex;
   justify-content: center;
-  margin: 2vmax 0;
+  margin: 20px 0;
+  /* Increased margin for better spacing */
 }
 
 .pagination {
   display: flex;
-  gap: 0.5vmax;
+  justify-content: center;
   padding: 0;
 }
 
 .page-item {
+  margin: 0 5px;
+  /* Add spacing between pagination items */
   list-style: none;
-  padding: 0.8vmax 1.2vmax;
+  /* Remove default list styling */
+}
+
+.page-link {
+  color: #333;
+  /* Set text color */
   background-color: #fff;
-  border-radius: 5px;
-  border: 1px solid #ddd;
+  /* Set background color */
+  border: 1px solid #ccc;
+  /* Add border to page links */
+  border-radius: 20px;
+  /* Round the corners */
+  padding: 8px 12px;
+  /* Add padding for better click area */
+  text-decoration: none;
+  /* Remove default underline */
+  transition: background-color 0.3s ease, color 0.3s ease;
+  /* Add transition for smooth hover effect */
+  font-family: 'Arial', sans-serif;
+  /* Choose an elegant font */
+}
+
+.page-link:hover {
+  background-color: #f0f0f0;
+  /* Change background color on hover */
+}
+
+.pageItemActive .page-link {
+  background-color: #007bff;
+  /* Change background color of active page */
+  color: #fff;
+  /* Change text color of active page */
+  border-color: #007bff;
+  /* Change border color of active page */
+}
+
+
+.page-item {
+  background-color: rgb(255, 255, 255);
+  list-style: none;
+  border: 1px solid rgba(0, 0, 0, 0.178);
+  padding: 1vmax 1.5vmax;
+  transition: all 0.3s;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+}
+
+.page-item:first-child {
+  border-radius: 5px 0 0 5px;
+}
+
+.page-item:last-child {
+  border-radius: 0 5px 5px 0;
+}
+
+.page-link {
+  text-decoration: none;
+  font: 300 0.7vmax "Roboto";
+  color: rgb(80, 80, 80);
+  transition: all 0.3s;
 }
 
 .page-item:hover {
-  background-color: #007bff;
-  color: white;
+  background-color: rgb(230, 230, 230);
+}
+
+.page-item:hover .page-link {
+  color: rgb(0, 0, 0);
 }
 
 .pageItemActive {
   background-color: tomato;
-  color: white;
 }
 
 .pageLinkActive {
-  color: white;
+  color: rgb(0, 0, 0);
 }
 
-/* Responsive Design */
-@media (max-width: 600px) {
+@media screen and (max-width: 600px) {
   .filterBox {
-    width: 100%;
-    margin: 0 auto 2vmax auto;
+    width: 20vmax;
+    position: static;
+    margin: auto;
   }
 
-  .products {
-    grid-template-columns: 1fr;
-    gap: 4vmax;
-    justify-content: center; /* Center the product cards */
+  .page-link {
+    font: 300 1.7vmax "Roboto";
   }
 
-  .productCardContainer {
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    text-align: center; /* Center align content */
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Center align items */
-    justify-content: center; /* Center align content vertically */
-    width: 80%; /* Reduce width to ensure centering */
-    margin: 0 auto;
-  }
-
-  .productCardContainer:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  }
-
-  .productCardImage {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-  }
-
-  .page-link,
   .category-link {
-    font-size: 1.2vmax; /* Reduced font size */
-  }
-
-  .addToCartBtn {
-    font-size: 1.2vmax;
-    padding: 1vmax 2vmax;
+    font: 400 1.8vmax "Roboto";
   }
 }

@@ -35,33 +35,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Rating } from "@material-ui/lab";
-import { useDispatch } from "react-redux";
-import { addItemsToCart } from "../../actions/cartAction";
-import { useAlert } from "react-alert";
 
 const ProductCard = ({ product }) => {
-  const dispatch = useDispatch();
-  const alert = useAlert();
-
   const options = {
-    value: product.ratings || 0,
+    value: product.ratings || 0, // Ensure a default value
     readOnly: true,
     precision: 0.5,
   };
 
-  const addToCartHandler = (e) => {
-    e.preventDefault(); 
-    dispatch(addItemsToCart(product._id, 1));
-    alert.success("Item Added To Cart");
-  };
-
   return (
-    <div className="productCardContainer">
-      <Link
-        className="productCard"
-        to={`/product/${product._id}`}
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div className="">
+      <Link className="productCard" to={`/product/${product._id}`}>
         <img src={product.images[0]?.url} alt={product.name} />
         <p>{product.name}</p>
         <div>
@@ -70,12 +54,7 @@ const ProductCard = ({ product }) => {
             {`(${product.numOfReviews || 0} Reviews)`}
           </span>
         </div>
-        <div className="productCardBottom">
-          <span>{`₹${product.price || 0}`}</span>
-          <button className="addToCartBtn" onClick={addToCartHandler}>
-            Add
-          </button>
-        </div>
+        <span>{`₹${product.price || 0}`}</span>
       </Link>
     </div>
   );
