@@ -178,7 +178,7 @@
 
 
 
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { DataGrid } from "@material-ui/data-grid";
 import "./productList.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -195,9 +195,16 @@ import {
   clearErrors,
 } from "../../actions/orderAction";
 import { DELETE_ORDER_RESET } from "../../constants/orderConstants";
+import logo from "../../images/logo192.png";
 
 const OrderList = ({ history }) => {
   const dispatch = useDispatch();
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  // const toggleSidebar = () => {
+  //   setIsSidebarOpen(!isSidebarOpen);
+  // };
 
   let orderIdCounter = 1;
 
@@ -206,6 +213,29 @@ const OrderList = ({ history }) => {
   const { error, orders } = useSelector((state) => state.allOrders);
 
   const { error: deleteError, isDeleted } = useSelector((state) => state.order);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setIsSidebarOpen(false); // Sidebar closed by default on small screens
+      } else {
+        setIsSidebarOpen(true); // Sidebar open by default on larger screens
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const toggleSidebar = () => {
+    if (window.innerWidth <= 768) {
+      setIsSidebarOpen(!isSidebarOpen); // Only toggle sidebar on small screens
+    }
+  };
 
   const deleteOrderHandler = (id) => {
     dispatch(deleteOrder(id));
@@ -242,13 +272,13 @@ const OrderList = ({ history }) => {
     },
 
 
-    { field: "orderid", headerName: "Order Number", minWidth: 100, flex: 0.3,
-
+    { field: "orderid",
+      headerName: "Order Number",
+      minWidth: 100,
+      flex: 0.3,
       headerAlign: 'left',
       align: 'left',
-
      },
-
 
 
     {
@@ -348,25 +378,28 @@ const OrderList = ({ history }) => {
 
   return (
     <Fragment>
-      <MetaData title={`ALL ORDERS - Admin`} />
+    <MetaData title={`ALL ORDERS - Admin`} />
 
-      <div className="dashboard">
-        <SideBar />
-        <div className="productListContainer">
-          <h1 id="productListHeading">ALL ORDERS</h1>
-          <div style={{ height: 600, width: "100%", overflow: "auto" }}>
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              pageSize={30}
-              disableSelectionOnClick
-              className="productListTable"
-              autoHeight
-            />
-          </div>
+    <div className={`dashboard ${isSidebarOpen ? "sidebar-open" : ""}`}>
+      <button className="sidebar-toggle" onClick={toggleSidebar}>
+        <img src={logo} alt="Toggle Sidebar" style={{ width: "50px", height: "40px" }} />
+      </button>
+      {isSidebarOpen && <SideBar />}
+      <div className="productListContainer">
+        <h1 id="productListHeading">ALL ORDERS</h1>
+        <div style={{ height: 600, width: "100%", overflow: "auto" }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            pageSize={10}
+            disableSelectionOnClick
+            className="productListTable"
+            autoHeight
+          />
         </div>
       </div>
-    </Fragment>
+    </div>
+  </Fragment>
   );
 };
 

@@ -12,10 +12,12 @@ import SpellcheckIcon from "@material-ui/icons/Spellcheck";
 import AttachMoneyIcon from "@material-ui/icons/AttachMoney";
 import SideBar from "./Sidebar";
 import { NEW_PRODUCT_RESET } from "../../constants/productConstants";
+import logo from "../../images/logo192.png";
 
 const NewProduct = ({ history }) => {
   const dispatch = useDispatch();
   const alert = useAlert();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const { loading, error, success } = useSelector((state) => state.newProduct);
 
@@ -37,6 +39,29 @@ const NewProduct = ({ history }) => {
     "SmartPhones",
   ];
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setIsSidebarOpen(false); // Sidebar closed by default on small screens
+      } else {
+        setIsSidebarOpen(true); // Sidebar open by default on larger screens
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const toggleSidebar = () => {
+    if (window.innerWidth <= 768) {
+      setIsSidebarOpen(!isSidebarOpen); // Only toggle sidebar on small screens
+    }
+  };
+  
   useEffect(() => {
     if (error) {
       alert.error(error);
@@ -90,8 +115,11 @@ const NewProduct = ({ history }) => {
   return (
     <Fragment>
       <MetaData title="Create Product" />
-      <div className="dashboard">
-        <SideBar />
+      <div className={`dashboard ${isSidebarOpen ? "sidebar-open" : ""}`}>
+        <button className="sidebar-toggle" onClick={toggleSidebar}>
+          <img src={logo} alt="Toggle Sidebar" style={{ width: "50px", height: "40px" }} />
+        </button>
+        {isSidebarOpen && <SideBar />}
         <div className="newProductContainer">
           <form
             className="createProductForm"

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { DataGrid } from "@material-ui/data-grid";
 import "./productList.css";
 import { useSelector, useDispatch } from "react-redux";
@@ -11,9 +11,12 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import SideBar from "./Sidebar";
 import { getAllUsers, clearErrors, deleteUser } from "../../actions/userAction";
 import { DELETE_USER_RESET } from "../../constants/userConstants";
+import logo from "../../images/logo192.png";
 
 const UsersList = ({ history }) => {
   const dispatch = useDispatch();
+
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const alert = useAlert();
 
@@ -29,6 +32,29 @@ const UsersList = ({ history }) => {
     dispatch(deleteUser(id));
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setIsSidebarOpen(false); // Sidebar closed by default on small screens
+      } else {
+        setIsSidebarOpen(true); // Sidebar open by default on larger screens
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    // Initial check
+    handleResize();
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const toggleSidebar = () => {
+    if (window.innerWidth <= 768) {
+      setIsSidebarOpen(!isSidebarOpen); // Only toggle sidebar on small screens
+    }
+  };
+  
   useEffect(() => {
     if (error) {
       alert.error(error);
@@ -50,19 +76,29 @@ const UsersList = ({ history }) => {
   }, [dispatch, alert, error, deleteError, history, isDeleted, message]);
 
   const columns = [
-    { field: "id", headerName: "User ID", minWidth: 180, flex: 0.8 },
+    { field: "id",
+      headerName: "User ID",
+      minWidth: 150,
+      flex: 0.5,
+      headerAlign: 'left',
+      align: 'left',
+    },
 
     {
       field: "email",
       headerName: "Email",
-      minWidth: 200,
-      flex: 1,
+      minWidth: 150,
+      flex: 0.5,
+      headerAlign: 'left',
+      align: 'left',
     },
     {
       field: "name",
       headerName: "Name",
       minWidth: 150,
       flex: 0.5,
+      headerAlign: 'center',
+      align: 'center',
     },
 
     {
@@ -70,6 +106,8 @@ const UsersList = ({ history }) => {
       headerName: "Role",
       type: "number",
       minWidth: 150,
+      headerAlign: 'center',
+      align: 'center',
       flex: 0.3,
       cellClassName: (params) => {
         return params.getValue(params.id, "role") === "admin"
@@ -83,6 +121,8 @@ const UsersList = ({ history }) => {
       flex: 0.3,
       headerName: "Actions",
       minWidth: 150,
+      headerAlign: 'center',
+      align: 'center',
       type: "number",
       sortable: false,
       renderCell: (params) => {
@@ -119,24 +159,27 @@ const UsersList = ({ history }) => {
 
   return (
     <Fragment>
-      <MetaData title={`ALL USERS - Admin`} />
+    <MetaData title={`ALL USERS - Admin`} />
 
-      <div className="dashboard">
-        <SideBar />
-        <div className="productListContainer">
-          <h1 id="productListHeading">ALL USERS</h1>
+    <div className={`dashboard ${isSidebarOpen ? "sidebar-open" : ""}`}>
+      <button className="sidebar-toggle" onClick={toggleSidebar}>
+        <img src={logo} alt="Toggle Sidebar" style={{ width: "50px", height: "40px" }} />
+      </button>
+      {isSidebarOpen && <SideBar />}
+      <div className="productListContainer">
+        <h1 id="productListHeading">ALL USERS</h1>
 
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={10}
-            disableSelectionOnClick
-            className="productListTable"
-            autoHeight
-          />
-        </div>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={10}
+          disableSelectionOnClick
+          className="productListTable"
+          autoHeight
+        />
       </div>
-    </Fragment>
+    </div>
+  </Fragment>
   );
 };
 

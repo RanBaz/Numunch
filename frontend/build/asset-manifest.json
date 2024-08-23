@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.3b5b9f9e.css",
-    "main.js": "/static/js/main.dd9ea4de.js",
+    "main.css": "/static/css/main.6654e8ee.css",
+    "main.js": "/static/js/main.a02b96ad.js",
     "static/media/fontawesome-webfont.svg?v=4.7.0": "/static/media/fontawesome-webfont.c1e38fd9e0e74ba58f7a.svg",
     "static/media/divyansh.jpeg": "/static/media/divyansh.51a67e22843f4ea5a65e.jpeg",
     "static/media/muskaan.jpeg": "/static/media/muskaan.ccb29e435aa3cd2d8e06.jpeg",
@@ -18,12 +18,13 @@
     "static/media/samar.jpeg": "/static/media/samar.43de6a2b2ff2d49949c9.jpeg",
     "static/media/Profile.png": "/static/media/Profile.697fdcd21f6d157b9073.png",
     "static/media/ranil.jpeg": "/static/media/ranil.ba19a2e4ef3967757de7.jpeg",
+    "static/media/logo192.png": "/static/media/logo192.3a13a69bff4e066d5d63.png",
     "index.html": "/index.html",
-    "main.3b5b9f9e.css.map": "/static/css/main.3b5b9f9e.css.map",
-    "main.dd9ea4de.js.map": "/static/js/main.dd9ea4de.js.map"
+    "main.6654e8ee.css.map": "/static/css/main.6654e8ee.css.map",
+    "main.a02b96ad.js.map": "/static/js/main.a02b96ad.js.map"
   },
   "entrypoints": [
-    "static/css/main.3b5b9f9e.css",
-    "static/js/main.dd9ea4de.js"
+    "static/css/main.6654e8ee.css",
+    "static/js/main.a02b96ad.js"
   ]
 }

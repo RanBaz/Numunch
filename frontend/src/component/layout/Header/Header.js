@@ -115,7 +115,11 @@ const Header = () => {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
+    <nav
+      className="navbar navbar-expand-lg bg-body-tertiary"
+      // className="navbar navbar-expand-lg bg-body-tertiary position-fixed w-100"
+      // style={{ zIndex: 1105, top: 0 }}
+    >
       <div className="container-fluid">
         {/* Brand */}
         <Link className="navbar-brand" to="/">
@@ -162,7 +166,9 @@ const Header = () => {
           </ul>
 
           {/* Search form */}
-          <form className="d-flex mx-auto w-50" onSubmit={searchSubmitHandler}>
+          <form className="d-flex mx-auto w-50" 
+          style={{ width: '50%', justifyContent: 'center' }}
+          onSubmit={searchSubmitHandler}>
             <input
               className="form-control me-2"
               type="search"
@@ -170,7 +176,7 @@ const Header = () => {
               aria-label="Search"
               value={keyword}
               onChange={handleKeywordChange}
-              style={{ flexGrow: 1 }}
+              style={{ flexGrow: 1, minWidth: '300px' }}
             />
             <button className="btn btn-outline-success" type="submit">
               Search
