@@ -230,8 +230,26 @@ const OrderList = ({ history }) => {
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobileView, setIsMobileView] = useState(false);
+
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+
+  const [keyword, setKeyword] = useState("");
+  const [filteredRows, setFilteredRows] = useState([]);
+
+  const handleKeywordChange = (e) => {
+    setKeyword(e.target.value);
+  };
+
+  const searchSubmitHandler = (e) => {
+    e.preventDefault();
+    const filtered = rows.filter(row => 
+      row.userName.toLowerCase().includes(keyword.toLowerCase())
+    );
+    setFilteredRows(filtered);
+    setPage(0); // Reset to first page when searching
+  };
+
 
   let orderIdCounter = 1;
 
@@ -372,16 +390,14 @@ const OrderList = ({ history }) => {
   orders &&
     orders.forEach((item) => {
       let order = {
-
-       
-      
         orderid: orderIdCounter++,
         id: item._id,
         itemsQty: item.orderItems.length,
         amount: item.totalPrice,
         status: item.orderStatus,
         userName: item.user ? item.user.name : "N/A",
-        createdAt: new Date(item.createdAt)
+        createdAt: new Date(item.createdAt),
+        orderItems: item.orderItems
       };
 
       if (item.orderStatus === "Delivered") {
@@ -403,7 +419,13 @@ const OrderList = ({ history }) => {
       <h3>Order #{order.orderid}</h3>
       <p>User: {order.userName}</p>
       <p>Status: <span className={order.status === "Delivered" ? "greenColor" : "redColor"}>{order.status}</span></p>
-      <p>Items: {order.itemsQty}</p>
+      <div style={{ marginBottom: '15px' }}>Items: 
+        {order.orderItems.map((item, index) => (
+          <div key={index} style={{ marginTop: '5px', marginLeft: '20px', fontSize: '13.5px', color: 'grey'}}>
+            {item.quantity} x {item.name}
+          </div>
+        ))}
+      </div>
       <p>Amount: ₹{order.amount}</p>
       <div className="order-actions">
       <Link to={`/admin/order/${order.id}`} className="order-action-icon">
@@ -416,32 +438,9 @@ const OrderList = ({ history }) => {
     </div>
   );
 
-  const paginatedRows = rows.slice(page * pageSize, (page + 1) * pageSize);
-
-  // const PaginationControls = () => {
-  //   const startIndex = page * pageSize + 1;
-  //   const endIndex = Math.min((page + 1) * pageSize, rows.length);
-  //   const totalEntries = rows.length;
-  //   return (
-  //     <div className="pagination-controls">
-  //       <button 
-  //         onClick={() => setPage(prev => Math.max(0, prev - 1))} 
-  //         disabled={page === 0}
-  //         className="pagination-button"
-  //       >
-  //         &lt;
-  //       </button>
-  //       <span>{startIndex}-{endIndex} of {totalEntries}</span>
-  //       <button 
-  //         onClick={() => setPage(prev => Math.min(Math.ceil(rows.length / pageSize) - 1, prev + 1))} 
-  //         disabled={page >= Math.ceil(rows.length / pageSize) - 1}
-  //         className="pagination-button"
-  //       >
-  //         &gt;
-  //       </button>
-  //     </div>
-  //   );
-  // };
+  const paginatedRows = keyword 
+  ? filteredRows.slice(page * pageSize, (page + 1) * pageSize)
+  : rows.slice(page * pageSize, (page + 1) * pageSize);
 
   return (
     <Fragment>
@@ -454,13 +453,32 @@ const OrderList = ({ history }) => {
         {isSidebarOpen && <SideBar />}
         <div className="productListContainer">
           <h1 id="productListHeading">ALL ORDERS</h1>
+          <form 
+            className="d-flex mx-auto w-50" 
+            style={{ width: '50%', justifyContent: 'center', marginBottom: '20px' }}
+            onSubmit={searchSubmitHandler}
+          >
+            <input
+              className="form-control me-2"
+              type="search"
+              placeholder="Search by Username"
+              aria-label="Search"
+              value={keyword}
+              onChange={handleKeywordChange}
+              style={{ flexGrow: 1, minWidth: '300px' }}
+            />
+            <button className="btn btn-outline-success" type="submit">
+              Search
+            </button>
+          </form>
+
           {isMobileView ? (
             <>
               <PaginationControls 
                 page={page} 
                 setPage={setPage} 
                 pageSize={pageSize} 
-                totalItems={rows.length} 
+                totalItems={keyword ? filteredRows.length : rows.length} 
               />
               <div className="order-cards-container">
                 {paginatedRows.map((order) => (
@@ -471,13 +489,13 @@ const OrderList = ({ history }) => {
                 page={page} 
                 setPage={setPage} 
                 pageSize={pageSize} 
-                totalItems={rows.length} 
+                totalItems={keyword ? filteredRows.length : rows.length} 
               />
             </>
           ) : (
             <div style={{ height: 600, width: "100%", overflow: "auto" }}>
               <DataGrid
-                rows={rows}
+                rows={keyword ? filteredRows : rows}
                 columns={columns}
                 page={page}
                 pageSize={pageSize}
