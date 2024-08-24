@@ -11,8 +11,10 @@
     padding: 1rem 1rem 0.5rem;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    max-height: 215px; /* Adjust this value as needed */
-    overflow: hidden;
+    height: auto; /* Allow the height to adjust automatically */
+    overflow: visible; /* Show all content */
+    margin-bottom: 1rem; /* Add some space between cards */
+    transition: all 0.3s ease; /* Smooth transition for any changes */
   }
   
   .order-card h3 {
