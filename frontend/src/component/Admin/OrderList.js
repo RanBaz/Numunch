@@ -190,6 +190,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import SideBar from "./Sidebar";
 import "./OrderCard.css"
+import "./OrderList.css";
 import {
   deleteOrder,
   getAllOrders,
@@ -198,15 +199,39 @@ import {
 import { DELETE_ORDER_RESET } from "../../constants/orderConstants";
 import logo from "../../images/logo192.png";
 
+const PaginationControls = ({ page, setPage, pageSize, totalItems }) => {
+  const startIndex = page * pageSize + 1;
+  const endIndex = Math.min((page + 1) * pageSize, totalItems);
+
+  return (
+    <div className="pagination-controls">
+      <button 
+        onClick={() => setPage(prev => Math.max(0, prev - 1))} 
+        disabled={page === 0}
+        className="pagination-button"
+      >
+        &lt;
+      </button>
+      <span>{startIndex}-{endIndex} of {totalItems}</span>
+      <button 
+        onClick={() => setPage(prev => Math.min(Math.ceil(totalItems / pageSize) - 1, prev + 1))} 
+        disabled={page >= Math.ceil(totalItems / pageSize) - 1}
+        className="pagination-button"
+      >
+        &gt;
+      </button>
+    </div>
+  );
+};
+
+
 const OrderList = ({ history }) => {
   const dispatch = useDispatch();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isMobileView, setIsMobileView] = useState(false);
-
-  // const toggleSidebar = () => {
-  //   setIsSidebarOpen(!isSidebarOpen);
-  // };
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
 
   let orderIdCounter = 1;
 
@@ -391,6 +416,33 @@ const OrderList = ({ history }) => {
     </div>
   );
 
+  const paginatedRows = rows.slice(page * pageSize, (page + 1) * pageSize);
+
+  // const PaginationControls = () => {
+  //   const startIndex = page * pageSize + 1;
+  //   const endIndex = Math.min((page + 1) * pageSize, rows.length);
+  //   const totalEntries = rows.length;
+  //   return (
+  //     <div className="pagination-controls">
+  //       <button 
+  //         onClick={() => setPage(prev => Math.max(0, prev - 1))} 
+  //         disabled={page === 0}
+  //         className="pagination-button"
+  //       >
+  //         &lt;
+  //       </button>
+  //       <span>{startIndex}-{endIndex} of {totalEntries}</span>
+  //       <button 
+  //         onClick={() => setPage(prev => Math.min(Math.ceil(rows.length / pageSize) - 1, prev + 1))} 
+  //         disabled={page >= Math.ceil(rows.length / pageSize) - 1}
+  //         className="pagination-button"
+  //       >
+  //         &gt;
+  //       </button>
+  //     </div>
+  //   );
+  // };
+
   return (
     <Fragment>
       <MetaData title={`ALL ORDERS - Admin`} />
@@ -403,17 +455,35 @@ const OrderList = ({ history }) => {
         <div className="productListContainer">
           <h1 id="productListHeading">ALL ORDERS</h1>
           {isMobileView ? (
-            <div className="order-cards-container">
-              {rows.map((order) => (
-                <OrderCard key={order.id} order={order} />
-              ))}
-            </div>
+            <>
+              <PaginationControls 
+                page={page} 
+                setPage={setPage} 
+                pageSize={pageSize} 
+                totalItems={rows.length} 
+              />
+              <div className="order-cards-container">
+                {paginatedRows.map((order) => (
+                  <OrderCard key={order.id} order={order} />
+                ))}
+              </div>
+              <PaginationControls 
+                page={page} 
+                setPage={setPage} 
+                pageSize={pageSize} 
+                totalItems={rows.length} 
+              />
+            </>
           ) : (
             <div style={{ height: 600, width: "100%", overflow: "auto" }}>
               <DataGrid
                 rows={rows}
                 columns={columns}
-                pageSize={10}
+                page={page}
+                pageSize={pageSize}
+                onPageChange={(newPage) => setPage(newPage)}
+                rowsPerPageOptions={[10]}
+                pagination
                 disableSelectionOnClick
                 className="productListTable"
                 autoHeight
