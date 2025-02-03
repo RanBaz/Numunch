@@ -83,6 +83,7 @@ const Shipping = ({ history }) => {
                 required
                 value="301705"
                 readOnly={true}
+                onChange={(e) => setPinCode(e.target.value)}
               />
             </div>
 
@@ -106,6 +107,7 @@ const Shipping = ({ history }) => {
                 required
                 value="India"
                 readOnly={true}
+                onChange={(e) => setCountry(e.target.value)}
               />
             </div>
 
@@ -135,6 +137,7 @@ const Shipping = ({ history }) => {
                 required
                 value="Rajasthan"
                 readOnly={true}
+                onChange={(e) => setState(e.target.value)}
               />
             </div>
 
