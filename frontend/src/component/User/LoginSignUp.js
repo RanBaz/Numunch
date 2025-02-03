@@ -23,7 +23,6 @@ const LoginSignUp = ({ history, location }) => {
 
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
 
   const [user, setUser] = useState({
     name: "",
@@ -36,29 +35,13 @@ const LoginSignUp = ({ history, location }) => {
   const [avatar, setAvatar] = useState("/Profile.png");
   const [avatarPreview, setAvatarPreview] = useState("/Profile.png");
 
-  // Email validation function
-  const validateEmail = (email) => {
-    const allowedDomains = ["st.niituniversity.in", "niituniversity.in"];
-    const domain = email.split("@")[1];
-    return allowedDomains.includes(domain);
-  };
-
   const loginSubmit = (e) => {
     e.preventDefault();
-    if (!validateEmail(loginEmail)) {
-      alert.error("Please use an email with st.niituniversity.in or niituniversity.in domain");
-      return;
-    }
     dispatch(login(loginEmail, loginPassword));
   };
 
   const registerSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validateEmail(email)) {
-      alert.error("Please use an email with st.niituniversity.in or niituniversity.in domain");
-      return;
-    }
 
     const myForm = new FormData();
 
@@ -74,21 +57,6 @@ const LoginSignUp = ({ history, location }) => {
     }
   };
 
-  const handleEmailChange = (e, isLogin = false) => {
-    const email = e.target.value;
-    if (email && !validateEmail(email)) {
-      setEmailError("Please use an email with st.niituniversity.in or niituniversity.in domain");
-    } else {
-      setEmailError("");
-    }
-
-    if (isLogin) {
-      setLoginEmail(email);
-    } else {
-      setUser({ ...user, email: email });
-    }
-  };
-
   const registerDataChange = (e) => {
     if (e.target.name === "avatar") {
       const reader = new FileReader();
@@ -101,8 +69,6 @@ const LoginSignUp = ({ history, location }) => {
       };
 
       reader.readAsDataURL(e.target.files[0]);
-    } else if (e.target.name === "email") {
-      handleEmailChange(e);
     } else {
       setUser({ ...user, [e.target.name]: e.target.value });
     }
@@ -161,10 +127,9 @@ const LoginSignUp = ({ history, location }) => {
                     placeholder="Email"
                     required
                     value={loginEmail}
-                    onChange={(e) => handleEmailChange(e, true)}
+                    onChange={(e) => setLoginEmail(e.target.value)}
                   />
                 </div>
-                {emailError && <div className="error-message">{emailError}</div>}
                 <div className="loginPassword">
                   <LockOpenIcon />
                   <input
@@ -206,7 +171,6 @@ const LoginSignUp = ({ history, location }) => {
                     onChange={registerDataChange}
                   />
                 </div>
-                {emailError && <div className="error-message">{emailError}</div>}
                 <div className="signUpPassword">
                   <LockOpenIcon />
                   <input
