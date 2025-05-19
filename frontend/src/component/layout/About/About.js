@@ -25,7 +25,7 @@ const About = () => {
                 <img src={avick} alt="" id="picture" />
                 <div className="details">
                   Avick Saha
-                  <span>Lead & Backend Developer</span>
+                  <span>Project Manager</span>
                 </div>
               </div>
 
@@ -35,7 +35,7 @@ const About = () => {
                 <img src={divyansh} alt="" id="picture" />
                 <div className="details">
                   Divyansh Mishra
-                  <span>Co-Lead & Frontend Developer</span>
+                  <span>Co-Manager & Frontend Developer</span>
                 </div>
               </div>
 
@@ -81,7 +81,7 @@ const About = () => {
                 <img src={ranil} alt="" id="picture" />
                 <div className="details">
                   Ranil Bazira
-                  <span>Database Manager</span>
+                  <span>Backend Developer Lead & Database Manager</span>
                 </div>
               </div>
 
